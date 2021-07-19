@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useReactiveVar } from "@apollo/client";
+import { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
+import { isLoggedInVar } from "./apollo";
+import Home from "./screens/Home";
+import Login from "./screens/Login";
 
 function App() {
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/" eaxt>
+          {isLoggedIn ? <Home /> : <Login />}
+        </Route>
+        <Redirect to="/" />
+      </Switch>
+    </Router>
   );
 }
 
