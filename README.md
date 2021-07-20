@@ -1,8 +1,8 @@
 # What do i need to do first 
 
 
-- [] Router
-- [] Authentication
-- [] Architecture(Refectoring)
-- [] Styles
+- [x] Router
+- [x] Authentication
+- [x] Architecture(Refectoring)
+- [x] Styles
 
