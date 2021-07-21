@@ -12,6 +12,8 @@ import Input from "../Components/auth/Input";
 import FormBox from "../Components/auth/FormBox";
 import BottomBox from "../Components/auth/BottomBox";
 import PageTitle from "../Components/pageTitle";
+import { appendErrors, useForm } from "react-hook-form";
+import FormError from "../Components/auth/FormError";
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -22,6 +24,17 @@ const FacebookLogin = styled.div`
 `;
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+  });
+  const onSubmitValid = (data) => {
+    //console.log(data);
+  };
   return (
     <AuthLayout>
       <PageTitle title="Login" />
@@ -29,10 +42,28 @@ const Login = () => {
         <div>
           <FontAwesomeIcon icon={faInstagram} size={"4x"} />
         </div>
-        <form>
-          <Input placeholder="Username" type="text" />
-          <Input type="password" placeholder="Password" />
-          <SButton type="submit" value="Log in" />
+        <form onSubmit={handleSubmit(onSubmitValid)}>
+          <Input
+            {...register("username", {
+              required: "Username is required!",
+              minLength: {
+                value: 5,
+                message: "Username should be longer than 5 characters",
+              },
+            })}
+            placeholder="Username"
+            type="text"
+            hasError={Boolean(errors?.username?.message)}
+          />
+          <FormError message={errors?.username?.message} />
+          <Input
+            {...register("password", { required: "Password is required" })}
+            type="password"
+            placeholder="Password"
+            hasError={Boolean(errors?.password?.message)}
+          />
+          <FormError message={errors.password?.message} />
+          <SButton type="submit" value="Log in" disabled={!formState.isValid} />
         </form>
         <SSeperator />
         <FacebookLogin>

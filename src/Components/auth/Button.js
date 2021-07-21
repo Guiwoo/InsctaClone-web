@@ -9,6 +9,7 @@ const SButton = styled.input`
   padding: 7px 0px;
   font-weight: 600;
   width: 100%;
+  opacity: ${(props) => (props.disabled ? "0.3" : "1")};
 `;
 
 export default SButton;
