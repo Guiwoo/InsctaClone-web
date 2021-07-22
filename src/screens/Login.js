@@ -14,6 +14,8 @@ import BottomBox from "../Components/auth/BottomBox";
 import PageTitle from "../Components/pageTitle";
 import { appendErrors, useForm } from "react-hook-form";
 import FormError from "../Components/auth/FormError";
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/client";
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -23,17 +25,39 @@ const FacebookLogin = styled.div`
   }
 `;
 
+const LOGIN_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, pasword: $password) {
+      ok
+      token
+      error
+    }
+  }
+`;
+
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState,
     formState: { errors },
+    getValues,
   } = useForm({
     mode: "onBlur",
   });
+  const onCompleted = (data) => {
+    console.log(data);
+  };
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, onCompleted);
   const onSubmitValid = (data) => {
-    //console.log(data);
+    if (loading) {
+      return;
+    }
+    const { username, password } = getValues();
+    login({
+      username,
+      password,
+    });
   };
   return (
     <AuthLayout>
@@ -63,7 +87,11 @@ const Login = () => {
             hasError={Boolean(errors?.password?.message)}
           />
           <FormError message={errors.password?.message} />
-          <SButton type="submit" value="Log in" disabled={!formState.isValid} />
+          <SButton
+            type="submit"
+            value={loading ? "Loading..." : "Log in"}
+            disabled={!formState.isValid || loading}
+          />
         </form>
         <SSeperator />
         <FacebookLogin>
