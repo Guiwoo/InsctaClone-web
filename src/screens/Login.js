@@ -12,10 +12,11 @@ import Input from "../Components/auth/Input";
 import FormBox from "../Components/auth/FormBox";
 import BottomBox from "../Components/auth/BottomBox";
 import PageTitle from "../Components/pageTitle";
-import { appendErrors, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import FormError from "../Components/auth/FormError";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
+import { logUserIn } from "../apollo";
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -26,8 +27,8 @@ const FacebookLogin = styled.div`
 `;
 
 const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, pasword: $password) {
+  mutation login($userName: String!, $password: String!) {
+    login(userName: $userName, password: $password) {
       ok
       token
       error
@@ -40,25 +41,44 @@ const Login = () => {
     register,
     handleSubmit,
     formState,
-    formState: { errors },
     getValues,
+    setError,
+    clearErrors,
+    formState: { errors },
   } = useForm({
-    mode: "onBlur",
+    mode: "onChange",
   });
+
   const onCompleted = (data) => {
-    console.log(data);
+    const {
+      login: { ok, error, token },
+    } = data;
+    if (!ok) {
+      return setError("result", {
+        message: error,
+      });
+    }
+    if (token) {
+      logUserIn(token);
+    }
   };
-  const [login, { loading }] = useMutation(LOGIN_MUTATION, onCompleted);
+
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, {
+    onCompleted,
+  });
   const onSubmitValid = (data) => {
     if (loading) {
       return;
     }
-    const { username, password } = getValues();
+    const { userName, password } = getValues();
     login({
-      username,
-      password,
+      variables: { userName, password },
     });
   };
+  const clearLoginError = () => {
+    clearErrors("result");
+  };
+
   return (
     <AuthLayout>
       <PageTitle title="Login" />
@@ -68,20 +88,24 @@ const Login = () => {
         </div>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
-            {...register("username", {
+            {...register("userName", {
               required: "Username is required!",
               minLength: {
                 value: 5,
                 message: "Username should be longer than 5 characters",
               },
             })}
+            onFocus={() => clearLoginError()}
             placeholder="Username"
+            name="userName"
             type="text"
-            hasError={Boolean(errors?.username?.message)}
+            hasError={Boolean(errors?.userName?.message)}
           />
-          <FormError message={errors?.username?.message} />
+          <FormError message={errors?.userName?.message} />
           <Input
             {...register("password", { required: "Password is required" })}
+            onFocus={() => clearLoginError()}
+            name="password"
             type="password"
             placeholder="Password"
             hasError={Boolean(errors?.password?.message)}
@@ -92,6 +116,7 @@ const Login = () => {
             value={loading ? "Loading..." : "Log in"}
             disabled={!formState.isValid || loading}
           />
+          <FormError message={errors?.result?.message} />
         </form>
         <SSeperator />
         <FacebookLogin>
