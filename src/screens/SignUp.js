@@ -58,11 +58,13 @@ const SignUp = () => {
     formState,
     clearErrors,
     setError,
+    getValues,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
   const onCompleted = (data) => {
+    const { userName, password } = getValues();
     const {
       createAccount: { ok, error },
     } = data;
@@ -71,7 +73,11 @@ const SignUp = () => {
         message: error,
       });
     }
-    history.push(routes.home);
+    history.push(routes.home, {
+      message: "Accout Created Please Login!",
+      userName,
+      password,
+    });
   };
   const [createAccount, { loading }] = useMutation(CREATE_ACCOUNT_MUTATION, {
     onCompleted,

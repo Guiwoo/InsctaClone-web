@@ -20,7 +20,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <HelmetProvider>
-        <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
           <GlobalStyles />
           <Router>
             <Switch>
