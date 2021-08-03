@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Avatar from "../Components/Avatar";
 import { FatText } from "../Components/shared";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import {
   faBookmark,
   faComment,
@@ -27,6 +28,7 @@ const FEED_QUERY = gql`
       comments
       createdAt
       isMine
+      isLiked
     }
   }
 `;
@@ -64,6 +66,9 @@ const PhotoActions = styled.div`
 `;
 const PhotoAction = styled.div`
   margin-right: 10px;
+  svg {
+    font-size: 20px;
+  }
 `;
 const Likes = styled(FatText)`
   margin-top: 10px;
@@ -87,13 +92,16 @@ const Home = () => {
             <PhotoActions>
               <div>
                 <PhotoAction>
-                  <FontAwesomeIcon size={"2x"} icon={faHeart} />
+                  <FontAwesomeIcon
+                    style={{ color: photo.isLiked ? "tomato" : "inherit" }}
+                    icon={photo.isLiked ? SolidHeart : faHeart}
+                  />
                 </PhotoAction>
                 <PhotoAction>
-                  <FontAwesomeIcon size={"2x"} icon={faComment} />
+                  <FontAwesomeIcon icon={faComment} />
                 </PhotoAction>
                 <PhotoAction>
-                  <FontAwesomeIcon size={"2x"} icon={faPaperPlane} />
+                  <FontAwesomeIcon icon={faPaperPlane} />
                 </PhotoAction>
               </div>
               <div>
