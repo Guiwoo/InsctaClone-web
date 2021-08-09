@@ -162,7 +162,8 @@ Photo.porpTypes = {
   isLiked: PropTypes.bool.isRequired,
   likes: PropTypes.number.isRequired,
   caption: PropTypes.string,
-  commentNumber: PropTypes.number.isRequired,
+  commentNumber: PropTypes.number,
+  //commentNumber: PropTypes.number.isRequired,
 };
 
 export default Photo;

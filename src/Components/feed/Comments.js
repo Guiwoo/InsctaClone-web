@@ -33,7 +33,8 @@ function Comments({ author, caption, commentNumber, comments }) {
 Comment.propTypes = {
   author: PropTypes.string.isRequired,
   caption: PropTypes.string,
-  commentNumber: PropTypes.number.isRequired,
+  //commentNumber: PropTypes.number.isRequired,
+  commentNumber: PropTypes.number,
   comments: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

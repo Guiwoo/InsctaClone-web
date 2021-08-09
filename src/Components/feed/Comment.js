@@ -1,14 +1,16 @@
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { FatText } from "../shared";
-import sanitizeHtml from "sanitize-html";
+// import sanitizeHtml from "sanitize-html"; dangerousHtml
+import { Link } from "react-router-dom";
 
 const SComment = styled.div`
   display: flex;
 `;
 const CommentCaption = styled.span`
   margin-left: 10px;
-  mark {
+  a {
     background-color: inherit;
     color: ${(props) => props.theme.accent};
     cursor: pointer;
@@ -17,20 +19,20 @@ const CommentCaption = styled.span`
 `;
 
 function Comment({ author, payload }) {
-  const cleanedPayload = sanitizeHtml(
-    payload.replace(/#[\w]+/g, "<mark>$&</mark>"),
-    {
-      allowedTags: ["mark"],
-    }
-  );
   return (
     <SComment>
       <FatText>{author}</FatText>
-      <CommentCaption
-        dangerouslySetInnerHTML={{
-          __html: cleanedPayload,
-        }}
-      />
+      <CommentCaption>
+        {payload.split(" ").map((word, index) =>
+          /#[\w]+/g.test(word) ? (
+            <React.Fragment key={index}>
+              <Link to={`/hashtags/${word}`}>{word}</Link>{" "}
+            </React.Fragment>
+          ) : (
+            <React.Fragment key={index}>{word} </React.Fragment>
+          )
+        )}
+      </CommentCaption>
     </SComment>
   );
 }
