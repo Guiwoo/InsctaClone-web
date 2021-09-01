@@ -112,11 +112,13 @@ const SignUp = () => {
             })}
             type="text"
             placeholder="First Name"
+            onFocus={clearLoginError}
           />
           <Input
             {...register("lastName")}
             type="text"
             placeholder="Last Name"
+            onFocus={clearLoginError}
           />
           <Input
             {...register("email", {
@@ -124,6 +126,7 @@ const SignUp = () => {
             })}
             type="text"
             placeholder="Email"
+            onFocus={clearLoginError}
           />
           <Input
             {...register("userName", {
@@ -131,6 +134,7 @@ const SignUp = () => {
             })}
             type="text"
             placeholder="Username"
+            onFocus={clearLoginError}
           />
           <Input
             {...register("password", {
@@ -138,6 +142,7 @@ const SignUp = () => {
             })}
             type="password"
             placeholder="Password"
+            onFocus={clearLoginError}
           />
           <SButton
             type="submit"

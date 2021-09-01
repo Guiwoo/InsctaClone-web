@@ -15,20 +15,20 @@ export const darkTheme = {
 
 export const GlobalStyles = createGlobalStyle`
     ${reset}
-    *{
-      box-sizing: border-box;
+    input {
+      all:unset;
     }
-    input{
-      all: unset;
+    * {
+      box-sizing:border-box;
     }
-    body{
-        background-color: ${(props) => props.theme.bgColor};
+    body {
+        background-color:${(props) => props.theme.bgColor};
+        font-size:14px;
+        font-family:'Open Sans', sans-serif;
         color:${(props) => props.theme.fontColor};
-        font-family: "open Sans",sans-serif;
-        font-size: 14px;
-    
     }
-    a{
+    a {
       text-decoration: none;
+      color: inherit;
     }
 `;

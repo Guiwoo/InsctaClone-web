@@ -28,6 +28,10 @@ const CommentCaption = styled.span`
     text-decoration: underline;
   }
 `;
+const Links = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`;
 
 function Comment({ id, photoId, author, payload, isMine }) {
   const updateDeleteComment = (cache, result) => {
@@ -59,7 +63,9 @@ function Comment({ id, photoId, author, payload, isMine }) {
   };
   return (
     <SComment>
-      <FatText>{author}</FatText>
+      <Links to={`/users/${author}`}>
+        <FatText>{author}</FatText>
+      </Links>
       <CommentCaption>
         {payload.split(" ").map((word, index) =>
           /#[\w]+/g.test(word) ? (

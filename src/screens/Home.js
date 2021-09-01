@@ -1,41 +1,31 @@
-import { useHistory } from "react-router";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import Photo from "../Components/feed/Photo";
 import PageTitle from "../Components/pageTitle";
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 
 export const FEED_QUERY = gql`
   query seeFeed {
     seeFeed {
-      id
+      ...PhotoFragment
       user {
         userName
         avatar
       }
-      file
       caption
-      likes
-      commentNumber
       comments {
-        id
-        user {
-          userName
-          avatar
-        }
-        payload
-        isMine
-        createdAt
+        ...CommentFragment
       }
       createdAt
       isMine
-      isLiked
     }
   }
+  ${PHOTO_FRAGMENT}
+  ${COMMENT_FRAGMENT}
 `;
 
 const Home = () => {
   const { data } = useQuery(FEED_QUERY);
-  const history = useHistory();
   return (
     <div>
       <PageTitle title="Home" />
